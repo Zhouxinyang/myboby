@@ -1,0 +1,118 @@
+﻿
+$w:64;
+@function rem($p) {
+    @return ($p/$w) + rem;
+}
+
+@mixin font-dpr($font-size) {
+    font-size: $font-size;
+    [data-dpr='2'] & {
+        font-size: $font-size * 2;
+    }
+    [data-dpr='3'] & {
+        font-size: $font-size * 3;
+    }
+}
+
+//段落显示 例如在高度100 宽度200的div中,显示4行文字，文字字体14px，颜色红色，微软雅黑
+//则 在css中可以这样定义 div{@include artical-show('14px',red,'微软雅黑',4,25px,200px);}
+@mixin artical-show($font-size, $font-color, $font-family, $rows, $line-height, $width) {
+    display: -webkit-box;
+    display: box;
+    font-size: $font-size;
+    color: $font-color;
+    font-family: $font-family;
+    line-height: $line-height;
+    height: $line-height * $rows;
+    width: $width;
+    [data-dpr="2"] & {
+        font-size: $font-size * 2;
+        line-height: $line-height * 2;
+        height: $line-height * 2 * $rows;
+    }
+    [data-dpr="3"] & {
+        font-size: $font-size * 3;
+        line-height: $line-height * 3;
+        height: $line-height * 3 * $rows;
+    }
+    color:$font-color;
+    overflow:hidden;
+    -webkit-line-clamp: $rows;
+    -webkit-box-orient:vertical;
+    box-orient:vertical;
+}
+
+//上下翻转 
+@mixin bg-rotate() {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    /* IE 9 */
+    -webkit-transform: rotate(180deg);
+    /* Safari and Chrome */
+    -o-transform: rotate(180deg);
+    /* Opera */
+    -moz-transform: rotate(180deg);
+    /* Firefox */
+}
+
+//BLingBling 背景闪烁
+//$patten闪烁次数 loop或正整数
+//$pre_time 每次动画执行时间
+@mixin blingbling($color, $patten, $time) {
+    @-webkit-keyframes _bing {
+        0% {
+            background-color: $color;
+        }
+        25% {
+            background-color: lighten($color, 10%);
+        }
+        50% {
+            background-color: $color;
+        }
+        75% {
+            background-color: darken($color, 10%);
+        }
+        100% {
+            background-color: $color;
+        }
+    }
+    @if $patten=='loop' {
+        -webkit-animation: _bing $time infinite;
+    }
+    @else {
+        -webkit-animation: _bing $time;
+        -webkit-animation-iteration-count:$patten;
+    }
+}
+
+//rotate旋转
+//$direction旋转方向 left|right
+//$patten旋转次数 loop 或 正整数
+//$time每圈时间
+@mixin rotate($direction, $patten, $time) {
+    @-webkit-keyframes _rotate {
+        @if($direction=='left') {
+            0% {
+                -webkit-transform: rotateZ(0deg);
+            }
+            100% {
+                -webkit-transform: rotateZ(-360deg);
+            }
+        }
+        @else {
+            0% {
+                -webkit-transform: rotateZ(0deg);
+            }
+            100% {
+                -webkit-transform: rotateZ(360deg);
+            }
+        }
+    }
+    @if $patten=='loop' {
+        -webkit-animation: _rotate $time linear infinite;
+    }
+    @else {
+        -webkit-animation: _rotate $time linear;
+        -webkit-animation-iteration-count: $patten;
+    }
+}
